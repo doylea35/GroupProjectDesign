@@ -9,10 +9,10 @@ profiles_router = APIRouter()
 
 
 #### GET Requests ####
-@profiles_router.get("/users/")
-async def get_users():
-    users = users_serial(users_collection.find())
-    return users
+# @profiles_router.get("/users/")
+# async def get_users():
+#     users = users_serial(users_collection.find())
+#     return users
 
 # @profiles_router.get("/groups/")
 # async def get_groups():
@@ -36,24 +36,24 @@ async def get_tasks():
 #     new_group = groups_collection.insert_one(group.dict())
 #     return {"id": str(new_group.inserted_id), "message": "Group created"}
 
-@profiles_router.post("/users/")
-def create_user(user: User):
-    if users_collection.find_one({"email": user.email}):
-        raise HTTPException(status_code=400, detail="Email already exists")
+# @profiles_router.post("/users/")
+# def create_user(user: User):
+#     if users_collection.find_one({"email": user.email}):
+#         raise HTTPException(status_code=400, detail="Email already exists")
 
-    # Validate group IDs
-    valid_group_ids = []
-    for group_id in user.groups:
-        if not groups_collection.find_one({"_id": ObjectId(group_id)}):
-            raise HTTPException(status_code=400, detail=f"Group {group_id} does not exist")
-        valid_group_ids.append(ObjectId(group_id))
+#     # Validate group IDs
+#     valid_group_ids = []
+#     for group_id in user.groups:
+#         if not groups_collection.find_one({"_id": ObjectId(group_id)}):
+#             raise HTTPException(status_code=400, detail=f"Group {group_id} does not exist")
+#         valid_group_ids.append(ObjectId(group_id))
 
-    # Insert user
-    user_dict = user.dict()
-    user_dict["groups"] = valid_group_ids
-    users_collection.insert_one(user_dict)
+#     # Insert user
+#     user_dict = user.dict()
+#     user_dict["groups"] = valid_group_ids
+#     users_collection.insert_one(user_dict)
 
-    return {"message": "User created", "email": user.email}
+#     return {"message": "User created", "email": user.email}
 
 #creates task and assigns it to user
 @profiles_router.post("/tasks/")
